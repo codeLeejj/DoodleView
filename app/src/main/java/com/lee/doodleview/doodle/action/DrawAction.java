@@ -1,5 +1,6 @@
 package com.lee.doodleview.doodle.action;
 
+import android.graphics.Canvas;
 import android.graphics.Paint;
 
 /**
@@ -21,4 +22,8 @@ public abstract class DrawAction {
         paint.setStrokeWidth(size);
         paint.setColor(color);
     }
+
+    public abstract void moveTo(float touchX, float touchY);
+
+    public abstract void draw(Canvas canvas);
 }
