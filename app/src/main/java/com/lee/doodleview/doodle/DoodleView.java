@@ -55,7 +55,6 @@ public class DoodleView extends View implements IDoodleView {
                 invalidate();
                 break;
             case MotionEvent.ACTION_UP:
-                drawActionList.add(currentAction);
                 currentAction = null;
                 break;
 
@@ -70,11 +69,6 @@ public class DoodleView extends View implements IDoodleView {
         for (DrawAction item : drawActionList) {
             item.draw(canvas);
         }
-
-        if (currentAction != null) {
-            currentAction.draw(canvas);
-            canvas.save();
-        }
     }
 
     private void createAction() {
@@ -83,10 +77,14 @@ public class DoodleView extends View implements IDoodleView {
                 currentAction = new PathAction(startX, startY, size, color);
                 break;
         }
+        drawActionList.add(currentAction);
     }
 
     @Override
     public void back() {
+        if (drawActionList.size() == 0) {
+            return;
+        }
         drawActionList.remove(drawActionList.size() - 1);
         invalidate();
     }

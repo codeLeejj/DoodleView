@@ -1,4 +1,4 @@
-package com.lee.doodleview;
+package com.lee.doodleview.utils;
 
 import android.content.res.Resources;
 import android.util.DisplayMetrics;

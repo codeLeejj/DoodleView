@@ -6,40 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.lee.doodleview.doodle.DoodleView
+    <com.lee.doodleview.packaging.ComplexDoodleView
         android:id="@+id/doodleView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        <!--    <ImageView-->
+        <!--        android:id="@+id/iv"-->
+        <!--        android:layout_width="100dp"-->
+        <!--        android:layout_height="200dp" />-->
 
-    <ImageView
-        android:id="@+id/iv"
-        android:layout_width="100dp"
-        android:layout_height="200dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="返回"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/btReset"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/btBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="撤回" />
 
-    <Button
-        android:id="@+id/btReset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="重写"
-        app:layout_constraintLeft_toRightOf="@+id/btBack"
-        app:layout_constraintRight_toLeftOf="@+id/btComplete"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/btReset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="重写" />
 
-    <Button
-        android:id="@+id/btComplete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="完成"
-        app:layout_constraintLeft_toRightOf="@+id/btReset"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/btComplete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="完成" />
+        </LinearLayout>
+    </com.lee.doodleview.packaging.ComplexDoodleView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
