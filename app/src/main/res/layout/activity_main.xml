@@ -6,14 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.lee.doodleview.packaging.ComplexDoodleView
+    <com.lee.boodlelib.packaging.ComplexDoodleView
         android:id="@+id/doodleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!--    <ImageView-->
-        <!--        android:id="@+id/iv"-->
-        <!--        android:layout_width="100dp"-->
-        <!--        android:layout_height="200dp" />-->
+
+        <ImageView
+            android:id="@+id/iv"
+            android:layout_width="100dp"
+            android:layout_height="200dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -37,9 +38,23 @@
                 android:id="@+id/btComplete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="完成" />
-        </LinearLayout>
-    </com.lee.doodleview.packaging.ComplexDoodleView>
+                android:text="获取位图" />
 
+            <Button
+                android:id="@+id/btCompleteFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="获取文件" />
+        </LinearLayout>
+    </com.lee.boodlelib.packaging.ComplexDoodleView>
+
+    <Button
+        android:id="@+id/btSuspension"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="悬浮"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

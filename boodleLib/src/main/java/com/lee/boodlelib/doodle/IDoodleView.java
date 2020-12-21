@@ -1,4 +1,4 @@
-package com.lee.doodleview.doodle;
+package com.lee.boodlelib.doodle;
 
 import android.graphics.Bitmap;
 

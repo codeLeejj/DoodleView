@@ -2,15 +2,26 @@ package com.lee.doodleview;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.view.Display;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import com.lee.doodleview.doodle.DoodleView;
-import com.lee.doodleview.doodle.IDoodleView;
-import com.lee.doodleview.packaging.ComplexDoodleView;
+import com.lee.boodlelib.helper.ISuspension;
+import com.lee.boodlelib.helper.SuspensionHelper;
+import com.lee.boodlelib.packaging.ComplexDoodleView;
+import com.lee.boodlelib.packaging.define.BitmapCallback;
+import com.lee.boodlelib.packaging.define.FileCallback;
 
+import java.io.Closeable;
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,32 +29,128 @@ public class MainActivity extends AppCompatActivity {
     ComplexDoodleView complexDoodleView;
 
     ImageView iv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        findViewById(R.id.btSuspension).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkPermission();
+            }
+        });
+
+        //------------------------------
+
         complexDoodleView = findViewById(R.id.doodleView);
-//        iv = findViewById(R.id.iv);
-//        findViewById(R.id.btBack).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                doodleView.back();
-//            }
-//        });
-//        findViewById(R.id.btReset).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                doodleView.clear();
-//            }
-//        });
-//        findViewById(R.id.btComplete).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bitmap bitmap = doodleView.getBitmap();
-//                iv.setImageBitmap(bitmap);
-//
-//                doodleView.save(new File(getCacheDir(),"1218.png"));
-//            }
-//        });
+
+        complexDoodleView.setRecall(R.id.btBack);
+        complexDoodleView.setClear(R.id.btReset);
+        iv = findViewById(R.id.iv);
+
+        complexDoodleView.getBitmap(R.id.btComplete, new BitmapCallback() {
+            @Override
+            public void getImage(Bitmap bitmap) {
+                iv.setImageBitmap(bitmap);
+            }
+        });
+        complexDoodleView.getFile(R.id.btCompleteFile,
+                new FileCallback(new File(getCacheDir(), "1221.png")) {
+                    @Override
+                    public void getImage(File bitmap) {
+                        Toast.makeText(getBaseContext(), "文件路径:" + bitmap.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public static final int REQUEST_CODE = 500;
+    SuspensionHelper helper;
+
+    private void checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                Toast.makeText(this, "当前无权限，请授权", Toast.LENGTH_SHORT);
+                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), REQUEST_CODE);
+            } else {
+                show();
+            }
+        } else {
+            show();
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!Settings.canDrawOverlays(this)) {
+                    Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show();
+                } else {
+                    show();
+                }
+            }
+        }
+    }
+
+    ISuspension suspension;
+
+    private void show() {
+        if (helper == null)
+            helper = new SuspensionHelper(MainActivity.this);
+
+        if (suspension == null) {
+            suspension = new ISuspension() {
+                @Override
+                public WindowManager.LayoutParams getLayoutParams() {
+                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+                    } else {
+                        layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+                    }
+                    layoutParams.format = PixelFormat.RGBA_8888;
+                    Display display = getWindowManager().getDefaultDisplay();
+                    int width = display.getWidth();
+                    int height = display.getHeight();
+                    layoutParams.width = width;
+                    layoutParams.height = height / 2;
+                    layoutParams.x = 0;
+                    layoutParams.y = height / 2;
+                    return layoutParams;
+                }
+
+                @Override
+                public View createView() {
+                    ComplexDoodleView complexDoodleView = (ComplexDoodleView) getLayoutInflater().inflate(R.layout.suspension_doodle, null, false);
+                    complexDoodleView.setClose(R.id.btClose, new Closeable() {
+                        @Override
+                        public void close() {
+                            helper.close();
+                        }
+                    });
+                    complexDoodleView.setRecall(R.id.btBack);
+                    complexDoodleView.setClear(R.id.btReset);
+
+                    complexDoodleView.getBitmap(R.id.btComplete, new BitmapCallback() {
+                        @Override
+                        public void getImage(Bitmap bitmap) {
+                            iv.setImageBitmap(bitmap);
+                        }
+                    });
+                    complexDoodleView.getFile(R.id.btCompleteFile,
+                            new FileCallback(new File(getCacheDir(), "1221.png")) {
+                                @Override
+                                public void getImage(File bitmap) {
+                                    Toast.makeText(getBaseContext(), "文件路径:" + bitmap.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                    return complexDoodleView;
+                }
+            };
+        }
+        helper.show(suspension);
     }
 }

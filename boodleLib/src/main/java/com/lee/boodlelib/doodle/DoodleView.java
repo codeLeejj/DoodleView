@@ -1,4 +1,4 @@
-package com.lee.doodleview.doodle;
+package com.lee.boodlelib.doodle;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,11 +8,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.annotation.Nullable;
-
-import com.lee.doodleview.doodle.action.DrawAction;
-import com.lee.doodleview.doodle.action.DrawActionType;
-import com.lee.doodleview.doodle.action.PathAction;
+import com.lee.boodlelib.doodle.action.DrawAction;
+import com.lee.boodlelib.doodle.action.DrawActionType;
+import com.lee.boodlelib.doodle.action.PathAction;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -31,7 +29,7 @@ public class DoodleView extends View implements IDoodleView {
         super(context);
     }
 
-    public DoodleView(Context context, @Nullable AttributeSet attrs) {
+    public DoodleView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

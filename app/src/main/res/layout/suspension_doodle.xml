@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lee.boodlelib.packaging.ComplexDoodleView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btClose"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:background="@android:drawable/ic_delete" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="撤回" />
+
+        <Button
+            android:id="@+id/btReset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="重写" />
+
+        <Button
+            android:id="@+id/btComplete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="获取位图" />
+
+        <Button
+            android:id="@+id/btCompleteFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="获取文件" />
+    </LinearLayout>
+</com.lee.boodlelib.packaging.ComplexDoodleView>
