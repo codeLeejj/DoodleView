@@ -107,7 +107,7 @@ public class DoodleView extends View implements IDoodleView {
     }
 
     @Override
-    public void save(final FileCallback callback) {
+    public void save(final int quality, final FileCallback callback) {
         if (callback == null) {
             return;
         }
@@ -122,7 +122,7 @@ public class DoodleView extends View implements IDoodleView {
                 BufferedOutputStream bos = null;
                 try {
                     bos = new BufferedOutputStream(new FileOutputStream(destFile));
-                    getBitmap().compress(Bitmap.CompressFormat.PNG, 50, bos);
+                    getBitmap().compress(Bitmap.CompressFormat.PNG, quality, bos);
                     return destFile;
                 } catch (FileNotFoundException e) {
                     return null;

@@ -117,7 +117,7 @@ public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleV
         findViewById(id).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                save(fileCallback);
+                save(90, fileCallback);
             }
         });
     }
@@ -138,7 +138,7 @@ public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleV
     }
 
     @Override
-    public void save(FileCallback callback) {
-        doodleView.save(callback);
+    public void save(int quality, FileCallback callback) {
+        doodleView.save(quality, callback);
     }
 }

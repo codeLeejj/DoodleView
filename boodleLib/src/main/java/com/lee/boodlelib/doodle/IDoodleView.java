@@ -12,5 +12,5 @@ public interface IDoodleView {
 
     Bitmap getBitmap();
 
-    void save(FileCallback callback);
+    void save( int quality,  FileCallback callback);
 }
