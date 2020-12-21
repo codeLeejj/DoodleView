@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.View;
 import com.lee.boodlelib.doodle.action.DrawAction;
 import com.lee.boodlelib.doodle.action.DrawActionType;
 import com.lee.boodlelib.doodle.action.PathAction;
+import com.lee.boodlelib.packaging.define.FileCallback;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -105,34 +107,41 @@ public class DoodleView extends View implements IDoodleView {
     }
 
     @Override
-    public boolean save(String path) {
-        File dest = new File(path);
-        return save(dest);
-    }
+    public void save(final FileCallback callback) {
+        if (callback == null) {
+            return;
+        }
+        final File destFile = callback.savePath;
 
-    @Override
-    public boolean save(File destFile) {
-        if (destFile == null)
-            return false;
         if (!destFile.getParentFile().exists()) {
             destFile.getParentFile().mkdir();
         }
-        BufferedOutputStream bos = null;
-        try {
-            bos = new BufferedOutputStream(new FileOutputStream(destFile));
-            getBitmap().compress(Bitmap.CompressFormat.PNG, 50, bos);
-            return true;
-        } catch (FileNotFoundException e) {
-            return false;
-        } finally {
-            try {
-                if (bos != null) {
-                    bos.flush();
-                    bos.close();
+        new AsyncTask<String, String, File>() {
+            @Override
+            protected File doInBackground(String... strings) {
+                BufferedOutputStream bos = null;
+                try {
+                    bos = new BufferedOutputStream(new FileOutputStream(destFile));
+                    getBitmap().compress(Bitmap.CompressFormat.PNG, 50, bos);
+                    return destFile;
+                } catch (FileNotFoundException e) {
+                    return null;
+                } finally {
+                    try {
+                        if (bos != null) {
+                            bos.flush();
+                            bos.close();
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
-            } catch (IOException ex) {
-                ex.printStackTrace();
             }
-        }
+
+            @Override
+            protected void onPostExecute(File file) {
+                callback.getImage(file);
+            }
+        }.execute();
     }
 }

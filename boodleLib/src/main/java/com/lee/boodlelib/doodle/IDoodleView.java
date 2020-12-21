@@ -2,7 +2,7 @@ package com.lee.boodlelib.doodle;
 
 import android.graphics.Bitmap;
 
-import java.io.File;
+import com.lee.boodlelib.packaging.define.FileCallback;
 
 public interface IDoodleView {
 
@@ -12,7 +12,5 @@ public interface IDoodleView {
 
     Bitmap getBitmap();
 
-    boolean save(String path);
-
-    boolean save(File destFile);
+    void save(FileCallback callback);
 }

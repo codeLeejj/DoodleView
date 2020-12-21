@@ -1,7 +1,7 @@
 package com.lee.boodlelib.packaging;
 
 import android.content.Context;
-import android.os.AsyncTask;
+import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import com.lee.boodlelib.packaging.define.IComplexDoodleView;
 import com.lee.boodlelib.packaging.define.FileCallback;
 
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
 
 
@@ -24,7 +23,7 @@ import java.io.IOException;
  * @author: lee
  * @create: 2020-12-18 16:32
  */
-public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleView {
+public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleView, IDoodleView {
 
     public ComplexDoodleView(Context context) {
         super(context);
@@ -72,7 +71,7 @@ public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleV
         findViewById(id).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                doodleView.back();
+                back();
             }
         });
     }
@@ -86,7 +85,7 @@ public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleV
         findViewById(id).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                doodleView.clear();
+                clear();
             }
         });
     }
@@ -102,7 +101,7 @@ public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleV
         findViewById(id).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                bitmapCallback.getImage(doodleView.getBitmap());
+                bitmapCallback.getImage(getBitmap());
             }
         });
     }
@@ -112,32 +111,34 @@ public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleV
     /**
      * set the view's id that can get a file
      */
-    public void getFile(int id, final FileCallback callback) {
+    public void getFile(int id, FileCallback callback) {
         if (callback == null) return;
         fileCallback = callback;
         findViewById(id).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ComplexDoodleView.this.getFile();
+                save(fileCallback);
             }
         });
     }
 
-    private void getFile() {
-        new AsyncTask<String, String, File>() {
-            @Override
-            protected File doInBackground(String... strings) {
-                boolean save = doodleView.save(fileCallback.savePath);
-                if (save) {
-                    return fileCallback.savePath;
-                }
-                return null;
-            }
+    @Override
+    public void back() {
+        doodleView.back();
+    }
 
-            @Override
-            protected void onPostExecute(File file) {
-                fileCallback.getImage(file);
-            }
-        }.execute();
+    @Override
+    public void clear() {
+        doodleView.clear();
+    }
+
+    @Override
+    public Bitmap getBitmap() {
+        return doodleView.getBitmap();
+    }
+
+    @Override
+    public void save(FileCallback callback) {
+        doodleView.save(callback);
     }
 }
