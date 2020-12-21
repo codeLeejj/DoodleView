@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                         layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
                     }
                     layoutParams.format = PixelFormat.RGBA_8888;
+
                     Display display = getWindowManager().getDefaultDisplay();
                     int width = display.getWidth();
                     int height = display.getHeight();
