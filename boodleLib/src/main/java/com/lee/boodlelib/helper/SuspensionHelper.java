@@ -17,9 +17,6 @@ public class SuspensionHelper {
         mActivity = activity;
     }
 
-    WindowManager windowManager;
-    View showingView;
-
     private WindowManager getWindowManager() {
         if (windowManager == null)
             // 获取WindowManager服务
@@ -37,6 +34,9 @@ public class SuspensionHelper {
             create();
         }
     }
+
+    WindowManager windowManager;
+    View showingView;
 
     private void create() {
         // 新建悬浮窗控件
