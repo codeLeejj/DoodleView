@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private void checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
-                Toast.makeText(this, "当前无权限，请授权", Toast.LENGTH_SHORT);
+                Toast.makeText(this, "当前无权限，请授权", Toast.LENGTH_SHORT).show();
                 startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), REQUEST_CODE);
             } else {
                 show();
@@ -106,16 +107,18 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public WindowManager.LayoutParams getLayoutParams() {
                     WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-                    } else {
-                        layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
-                    }
+                    //app 内有效
+                    layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
+                    //整个 系统有效(慎用)
+//                        layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+
                     layoutParams.format = PixelFormat.RGBA_8888;
 
                     Display display = getWindowManager().getDefaultDisplay();
-                    int width = display.getWidth();
-                    int height = display.getHeight();
+                    Point outSize = new Point();
+                    display.getSize(outSize);
+                    int width = outSize.x;
+                    int height = outSize.y;
                     layoutParams.width = width;
                     layoutParams.height = height / 2;
                     layoutParams.x = 0;

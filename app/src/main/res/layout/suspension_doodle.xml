@@ -6,8 +6,8 @@
 
     <Button
         android:id="@+id/btClose"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:background="@android:drawable/ic_delete" />
 

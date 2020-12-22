@@ -1,7 +1,7 @@
 # DoodleView
 Doodle view
 
-IDoodleView 为画板
+IDoodleView : 画板,直接在Canvas上面绘画,避免在Surface上面绘画(存在相应不及时的问题)
 
 ComplexDoodleView 对 IDoodleView 进行包装，并开放操作，已插件方式设置各个操作view
 
@@ -9,7 +9,25 @@ SuspensionHelper 负责WindowManger的操作，
 
 ISuspension 定义显示视图，及layoutParams
 
+### 依赖方式
 
+Add it in your root build.gradle at the end of repositories:
+
+```groovy
+	allprojects {
+		repositories {
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
+**Step 2.** Add the dependency
+
+```groovy
+	dependencies {
+	        implementation 'com.github.codeLeejj:DoodleView:1.0.1'
+	}
+```
 
 ### 使用
 
@@ -46,11 +64,11 @@ private void show() {
                 @Override
                 public WindowManager.LayoutParams getLayoutParams() {
                     WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
-                    } else {
-                        layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
-                    }
+                    //app 内有效
+                    layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
+                    //整个 系统有效(慎用)
+                    //layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+
                     layoutParams.format = PixelFormat.RGBA_8888;
 
                     Display display = getWindowManager().getDefaultDisplay();
