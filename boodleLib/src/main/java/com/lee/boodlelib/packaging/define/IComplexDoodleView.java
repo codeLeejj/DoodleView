@@ -18,7 +18,5 @@ public interface IComplexDoodleView {
 
     void setClear(int id);
 
-    void getFile(int id, FileCallback callback);
-
     void getBitmap(int id, BitmapCallback callback);
 }

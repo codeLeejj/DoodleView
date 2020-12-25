@@ -55,13 +55,13 @@ public class MainActivity extends AppCompatActivity {
                 iv.setImageBitmap(bitmap);
             }
         });
-        complexDoodleView.getFile(R.id.btCompleteFile,
-                new FileCallback(new File(getCacheDir(), "1221.png")) {
-                    @Override
-                    public void getImage(File bitmap) {
-                        Toast.makeText(getBaseContext(), "文件路径:" + bitmap.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+//        complexDoodleView.getFile(R.id.btCompleteFile,
+//                new FileCallback(10,new File(getCacheDir(), "1221.png")) {
+//                    @Override
+//                    public void getImage(File bitmap) {
+//                        Toast.makeText(getBaseContext(), "文件路径:" + bitmap.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
     }
 
     public static final int REQUEST_CODE = 500;
@@ -155,13 +155,13 @@ public class MainActivity extends AppCompatActivity {
                             iv.setImageBitmap(bitmap);
                         }
                     });
-                    complexDoodleView.getFile(R.id.btCompleteFile,
-                            new FileCallback(new File(getCacheDir(), "1221.png")) {
-                                @Override
-                                public void getImage(File bitmap) {
-                                    Toast.makeText(getBaseContext(), "文件路径:" + bitmap.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+//                    complexDoodleView.getFile(R.id.btCompleteFile,
+//                            new FileCallback(10,new File(getCacheDir(), "1221.png")) {
+//                                @Override
+//                                public void getImage(File bitmap) {
+//                                    Toast.makeText(getBaseContext(), "文件路径:" + bitmap.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
                     return complexDoodleView;
                 }
             };

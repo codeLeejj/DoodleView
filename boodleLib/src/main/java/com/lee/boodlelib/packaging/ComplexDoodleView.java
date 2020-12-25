@@ -106,20 +106,9 @@ public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleV
         });
     }
 
-    FileCallback fileCallback;
-
-    /**
-     * set the view's id that can get a file
-     */
-    public void getFile(int id, FileCallback callback) {
-        if (callback == null) return;
-        fileCallback = callback;
-        findViewById(id).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                save(90, fileCallback);
-            }
-        });
+    @Override
+    public boolean isEmpty() {
+        return doodleView.isEmpty();
     }
 
     @Override
@@ -135,10 +124,5 @@ public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleV
     @Override
     public Bitmap getBitmap() {
         return doodleView.getBitmap();
-    }
-
-    @Override
-    public void save(int quality, FileCallback callback) {
-        doodleView.save(quality, callback);
     }
 }

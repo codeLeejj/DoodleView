@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 public class DoodleView extends View implements IDoodleView {
     List<DrawAction> drawActionList = new ArrayList<>();
     DrawAction currentAction;
@@ -81,6 +84,11 @@ public class DoodleView extends View implements IDoodleView {
     }
 
     @Override
+    public boolean isEmpty() {
+        return drawActionList == null || drawActionList.isEmpty();
+    }
+
+    @Override
     public void back() {
         if (drawActionList.size() == 0) {
             return;
@@ -104,44 +112,5 @@ public class DoodleView extends View implements IDoodleView {
         canvas.translate(-getScrollX(), -getScrollY());
         draw(canvas);// 将 view 画到画布上
         return screenshot;
-    }
-
-    @Override
-    public void save(final int quality, final FileCallback callback) {
-        if (callback == null) {
-            return;
-        }
-        final File destFile = callback.savePath;
-
-        if (!destFile.getParentFile().exists()) {
-            destFile.getParentFile().mkdir();
-        }
-        new AsyncTask<String, String, File>() {
-            @Override
-            protected File doInBackground(String... strings) {
-                BufferedOutputStream bos = null;
-                try {
-                    bos = new BufferedOutputStream(new FileOutputStream(destFile));
-                    getBitmap().compress(Bitmap.CompressFormat.PNG, quality, bos);
-                    return destFile;
-                } catch (FileNotFoundException e) {
-                    return null;
-                } finally {
-                    try {
-                        if (bos != null) {
-                            bos.flush();
-                            bos.close();
-                        }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            protected void onPostExecute(File file) {
-                callback.getImage(file);
-            }
-        }.execute();
     }
 }

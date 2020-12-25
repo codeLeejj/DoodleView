@@ -10,8 +10,10 @@ import java.io.File;
  */
 public abstract class FileCallback implements ImageCallback {
     public File savePath;
+    public int mQuality;
 
-    public FileCallback(File savePath) {
+    public FileCallback(int quality, File savePath) {
+        mQuality = quality;
         this.savePath = savePath;
     }
 
