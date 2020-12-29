@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     ISuspension suspension;
@@ -107,12 +108,12 @@ public class MainActivity extends AppCompatActivity {
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         layoutParams.type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY;
-//                        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+//                      layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
                     } else {
                         //app 内有效
                         layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
                     }
-                    //整个 系统有效(慎用)
+                    //整个 系统内有效(慎用)
 //                        layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
 
                     //设置没有焦点不能touch,这样其他的界面才可以滑动和操作
