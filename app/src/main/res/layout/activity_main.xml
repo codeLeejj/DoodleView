@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/iv"
-            android:layout_width="100dp"
-            android:layout_height="200dp" />
+            android:layout_width="220dp"
+            android:layout_height="400dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -39,12 +39,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="获取位图" />
-
-            <Button
-                android:id="@+id/btCompleteFile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="获取文件" />
         </LinearLayout>
     </com.lee.boodlelib.packaging.ComplexDoodleView>
 

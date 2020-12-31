@@ -21,6 +21,7 @@ import com.lee.boodlelib.helper.SuspensionHelper;
 import com.lee.boodlelib.packaging.ComplexDoodleView;
 import com.lee.boodlelib.packaging.define.BitmapCallback;
 import com.lee.boodlelib.packaging.define.FileCallback;
+import com.lee.boodlelib.utils.BitmapUtil;
 
 import java.io.Closeable;
 import java.io.File;
@@ -52,16 +53,10 @@ public class MainActivity extends AppCompatActivity {
         complexDoodleView.getBitmap(R.id.btComplete, new BitmapCallback() {
             @Override
             public void getImage(Bitmap bitmap) {
+                String base64 = BitmapUtil.bitmap2Base64(bitmap, Bitmap.CompressFormat.PNG);
                 iv.setImageBitmap(bitmap);
             }
         });
-//        complexDoodleView.getFile(R.id.btCompleteFile,
-//                new FileCallback(10,new File(getCacheDir(), "1221.png")) {
-//                    @Override
-//                    public void getImage(File bitmap) {
-//                        Toast.makeText(getBaseContext(), "文件路径:" + bitmap.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
     }
 
     public static final int REQUEST_CODE = 500;
@@ -105,10 +100,9 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public WindowManager.LayoutParams getLayoutParams() {
                     WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        layoutParams.type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY;
-//                      layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+//                        layoutParams.type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY;
+                        layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
                     } else {
                         //app 内有效
                         layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION;
@@ -122,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
 //                            | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
 
                     layoutParams.format = PixelFormat.RGBA_8888;
-
                     //获取屏幕大小
                     Display display = getWindowManager().getDefaultDisplay();
                     Point outSize = new Point();
@@ -153,16 +146,10 @@ public class MainActivity extends AppCompatActivity {
                     complexDoodleView.getBitmap(R.id.btComplete, new BitmapCallback() {
                         @Override
                         public void getImage(Bitmap bitmap) {
-                            iv.setImageBitmap(bitmap);
+                            Bitmap compress = BitmapUtil.compress(bitmap, Bitmap.CompressFormat.PNG, 500, 500);
+                            iv.setImageBitmap(compress);
                         }
                     });
-//                    complexDoodleView.getFile(R.id.btCompleteFile,
-//                            new FileCallback(10,new File(getCacheDir(), "1221.png")) {
-//                                @Override
-//                                public void getImage(File bitmap) {
-//                                    Toast.makeText(getBaseContext(), "文件路径:" + bitmap.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-//                                }
-//                            });
                     return complexDoodleView;
                 }
             };
