@@ -8,6 +8,9 @@ import android.view.WindowManager;
 
 import static android.content.Context.WINDOW_SERVICE;
 
+/**
+ *
+ */
 public class SuspensionHelper {
 
     Activity mActivity;
@@ -24,6 +27,11 @@ public class SuspensionHelper {
         return windowManager;
     }
 
+    /**
+     * 根据 {@suspension} 创建窗口
+     *
+     * @param suspension 悬浮窗的定义¬
+     */
     public void show(ISuspension suspension) {
         this.suspension = suspension;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -38,16 +46,34 @@ public class SuspensionHelper {
     WindowManager windowManager;
     View showingView;
 
+
     private void create() {
+        if (suspension == null) return;
+        if (showingView != null) {
+            close();
+        }
         // 新建悬浮窗控件
         showingView = suspension.createView();
-        WindowManager.LayoutParams layoutParams = suspension.getLayoutParams();
         // 将悬浮窗控件添加到WindowManager
-        getWindowManager().addView(showingView, layoutParams);
+        getWindowManager().addView(showingView, suspension.getLayoutParams());
     }
 
+    /**
+     * 是否有正在显示的悬浮窗
+     *
+     * @return
+     */
+    public boolean isShowing() {
+        return showingView != null;
+    }
+
+    /**
+     * 关闭窗口
+     */
     public void close() {
-        if (showingView != null)
+        if (showingView != null) {
             getWindowManager().removeView(showingView);
+            showingView = null;
+        }
     }
 }
