@@ -12,6 +12,7 @@ import android.view.View;
 import com.lee.boodlelib.doodle.action.DrawAction;
 import com.lee.boodlelib.doodle.action.DrawActionType;
 import com.lee.boodlelib.doodle.action.PathAction;
+import com.lee.boodlelib.doodle.config.DoodleConfig;
 import com.lee.boodlelib.packaging.define.FileCallback;
 
 import java.io.BufferedOutputStream;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * 画板
  */
 public class DoodleView extends View implements IDoodleView {
     List<DrawAction> drawActionList = new ArrayList<>();
@@ -34,13 +35,24 @@ public class DoodleView extends View implements IDoodleView {
         super(context);
     }
 
+    float startX, startY;
+
     public DoodleView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    int size = 3;
-    int color = Color.BLACK;
-    float startX, startY;
+    DoodleConfig config;
+
+    private DoodleConfig getConfig() {
+        if (config == null) {
+            config = DoodleConfig.getDefaultConfig();
+        }
+        return config;
+    }
+
+    public void setConfig(DoodleConfig config) {
+        this.config = config;
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -75,10 +87,8 @@ public class DoodleView extends View implements IDoodleView {
     }
 
     private void createAction() {
-        switch (drawActionType) {
-            case Path:
-                currentAction = new PathAction(startX, startY, size, color);
-                break;
+        if (drawActionType == DrawActionType.Path) {
+            currentAction = new PathAction(startX, startY, getConfig().getPaintSize(), getConfig().getPaintColor());
         }
         drawActionList.add(currentAction);
     }

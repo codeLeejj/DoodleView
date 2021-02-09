@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 
 import com.lee.boodlelib.doodle.DoodleView;
 import com.lee.boodlelib.doodle.IDoodleView;
+import com.lee.boodlelib.doodle.config.DoodleConfig;
 import com.lee.boodlelib.packaging.define.BitmapCallback;
 import com.lee.boodlelib.packaging.define.IComplexDoodleView;
 import com.lee.boodlelib.packaging.define.FileCallback;
@@ -104,6 +105,11 @@ public class ComplexDoodleView extends RelativeLayout implements IComplexDoodleV
                 bitmapCallback.getImage(getBitmap());
             }
         });
+    }
+
+    @Override
+    public void setConfig(DoodleConfig config) {
+        doodleView.setConfig(config);
     }
 
     @Override

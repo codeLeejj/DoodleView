@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.lee.boodlelib.doodle.config.DoodleConfig;
 import com.lee.boodlelib.helper.ISuspension;
 import com.lee.boodlelib.helper.SuspensionHelper;
 import com.lee.boodlelib.packaging.ComplexDoodleView;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         complexDoodleView.setRecall(R.id.btBack);
         complexDoodleView.setClear(R.id.btReset);
         iv = findViewById(R.id.iv);
-
+        complexDoodleView.setConfig(new DoodleConfig.Builder().setPaintSize(5).build());
         complexDoodleView.getBitmap(R.id.btComplete, new BitmapCallback() {
             @Override
             public void getImage(Bitmap bitmap) {
