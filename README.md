@@ -25,7 +25,7 @@ Add it in your root build.gradle at the end of repositories:
 
 ```groovy
 	dependencies {
-	        implementation 'com.github.codeLeejj:DoodleView:1.0.3'
+	        implementation 'com.github.codeLeejj:DoodleView:1.0.5'
 	}
 ```
 
