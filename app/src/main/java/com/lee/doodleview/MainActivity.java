@@ -157,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
                     return complexDoodleView;
                 }
             };
+        }else{
+
         }
         helper.show(suspension);
     }

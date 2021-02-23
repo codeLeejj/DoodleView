@@ -114,3 +114,41 @@ private void show() {
     }
 ```
 
+
+#### 更灵活的使用：
+
+```java
+private void show() {
+        if (helper == null)
+            helper = new SuspensionHelper(MainActivity.this);
+
+
+        if (suspension == null) {
+            suspension = new SuspensionImpl() {
+                @Override
+                protected WindowManager.LayoutParams createLayoutParams() {
+                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                    ~~~~
+                    return layoutParams;
+                }
+
+
+                @Override
+                protected View createView() {
+                    ~~~~
+                    return view;
+                }
+            };
+        }else{
+            //update view or layoutParams
+            WindowManager.LayoutParams layoutParams = suspension.getLayoutParams();
+            ~~
+            suspension.updateLayoutParams(layoutParams);
+
+            View view = suspension.getView();
+            ~~
+            suspension.updateView(view);
+        }
+        helper.show(suspension);
+    }
+```
