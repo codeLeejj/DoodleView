@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.lee.boodlelib.doodle.config.DoodleConfig;
 import com.lee.boodlelib.helper.ISuspension;
 import com.lee.boodlelib.helper.SuspensionHelper;
+import com.lee.boodlelib.helper.SuspensionImpl;
 import com.lee.boodlelib.packaging.ComplexDoodleView;
 import com.lee.boodlelib.packaging.define.BitmapCallback;
 import com.lee.boodlelib.packaging.define.FileCallback;
@@ -90,16 +91,16 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    ISuspension suspension;
+    SuspensionImpl suspension;
 
     private void show() {
         if (helper == null)
             helper = SuspensionHelper.getInstance(MainActivity.this);
 
         if (suspension == null) {
-            suspension = new ISuspension() {
+            suspension = new SuspensionImpl() {
                 @Override
-                public WindowManager.LayoutParams getLayoutParams() {
+                protected WindowManager.LayoutParams createLayoutParams() {
                     WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //                        layoutParams.type = WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY;
@@ -132,13 +133,14 @@ public class MainActivity extends AppCompatActivity {
                     return layoutParams;
                 }
 
+
                 @Override
-                public View createView() {
+                protected View createView() {
                     ComplexDoodleView complexDoodleView = (ComplexDoodleView) getLayoutInflater().inflate(R.layout.suspension_doodle, null, false);
                     complexDoodleView.setClose(R.id.btClose, new Closeable() {
                         @Override
                         public void close() {
-                            helper.close();
+                            helper.closeAll();
                         }
                     });
                     complexDoodleView.setConfig(new DoodleConfig.Builder().setPaintSize(8).build());

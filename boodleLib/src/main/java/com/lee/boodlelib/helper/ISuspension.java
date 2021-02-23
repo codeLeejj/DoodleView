@@ -33,5 +33,5 @@ public interface ISuspension {
      *
      * @return view to show
      */
-    View createView();
+    View getView();
 }

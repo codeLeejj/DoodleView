@@ -38,7 +38,6 @@ public class SuspensionHelper {
         return helper;
     }
 
-
     /**
      * 根据 {@suspension} 创建窗口
      *
@@ -66,7 +65,7 @@ public class SuspensionHelper {
             closeAll();
         }
         // 新建悬浮窗控件
-        View showingView = suspension.createView();
+        View showingView = suspension.getView();
         showingViews.add(showingView);
         // 将悬浮窗控件添加到WindowManager
         windowManager.addView(showingView, suspension.getLayoutParams());
