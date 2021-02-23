@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         complexDoodleView.setRecall(R.id.btBack);
         complexDoodleView.setClear(R.id.btReset);
         iv = findViewById(R.id.iv);
-        complexDoodleView.setConfig(new DoodleConfig.Builder().setPaintSize(5).build());
+        complexDoodleView.setConfig(new DoodleConfig.Builder().setPaintSize(10).build());
         complexDoodleView.getBitmap(R.id.btComplete, new BitmapCallback() {
             @Override
             public void getImage(Bitmap bitmap) {
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void show() {
         if (helper == null)
-            helper = new SuspensionHelper(MainActivity.this);
+            helper = SuspensionHelper.getInstance(MainActivity.this);
 
         if (suspension == null) {
             suspension = new ISuspension() {
@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                             helper.close();
                         }
                     });
+                    complexDoodleView.setConfig(new DoodleConfig.Builder().setPaintSize(8).build());
                     complexDoodleView.setRecall(R.id.btBack);
                     complexDoodleView.setClear(R.id.btReset);
 

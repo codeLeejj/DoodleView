@@ -28,5 +28,10 @@ public interface ISuspension {
      */
     WindowManager.LayoutParams getLayoutParams();
 
+    /**
+     * draw one view to show
+     *
+     * @return view to show
+     */
     View createView();
 }

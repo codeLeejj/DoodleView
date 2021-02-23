@@ -1,31 +1,43 @@
 package com.lee.boodlelib.helper;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static android.content.Context.WINDOW_SERVICE;
 
 /**
- *
+ * 作为悬浮窗的管理帮助类
+ * 使用单例的方式,可以统一管理全局的悬浮框
  */
 public class SuspensionHelper {
 
-    Activity mActivity;
+    Context mContext;
+    WindowManager windowManager;
+    static SuspensionHelper helper;
     ISuspension suspension;
 
-    public SuspensionHelper(Activity activity) {
-        mActivity = activity;
-    }
-
-    private WindowManager getWindowManager() {
+    private SuspensionHelper(Context context) {
+        mContext = context;
         if (windowManager == null)
             // 获取WindowManager服务
-            windowManager = (WindowManager) mActivity.getSystemService(WINDOW_SERVICE);
-        return windowManager;
+            windowManager = (WindowManager) mContext.getSystemService(WINDOW_SERVICE);
     }
+
+    public static SuspensionHelper getInstance(Context context) {
+        if (helper == null) {
+            helper = new SuspensionHelper(context);
+        } else {
+            helper.mContext = context;
+        }
+        return helper;
+    }
+
 
     /**
      * 根据 {@suspension} 创建窗口
@@ -35,7 +47,7 @@ public class SuspensionHelper {
     public void show(ISuspension suspension) {
         this.suspension = suspension;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (Settings.canDrawOverlays(mActivity)) {
+            if (Settings.canDrawOverlays(mContext)) {
                 create();
             }
         } else {
@@ -43,19 +55,21 @@ public class SuspensionHelper {
         }
     }
 
-    WindowManager windowManager;
-    View showingView;
-
+    List<View> showingViews;
 
     private void create() {
         if (suspension == null) return;
-        if (showingView != null) {
-            close();
+        if (showingViews == null) {
+            showingViews = new ArrayList<>();
+        } else if (showingViews.size() > 0) {
+            //当前是作为单个view 过度到多个,所以先简单处理
+            closeAll();
         }
         // 新建悬浮窗控件
-        showingView = suspension.createView();
+        View showingView = suspension.createView();
+        showingViews.add(showingView);
         // 将悬浮窗控件添加到WindowManager
-        getWindowManager().addView(showingView, suspension.getLayoutParams());
+        windowManager.addView(showingView, suspension.getLayoutParams());
     }
 
     /**
@@ -64,16 +78,25 @@ public class SuspensionHelper {
      * @return
      */
     public boolean isShowing() {
-        return showingView != null;
+        return showingViews != null && showingViews.size() > 0;
     }
 
     /**
      * 关闭窗口
      */
-    public void close() {
-        if (showingView != null) {
-            getWindowManager().removeView(showingView);
-            showingView = null;
+    public void closeAll() {
+        if (showingViews != null) {
+            for (View showingView : showingViews) {
+                close(showingView);
+            }
+            showingViews.clear();
         }
+    }
+
+    /**
+     * 关闭窗口
+     */
+    public void close(View view) {
+        windowManager.removeView(view);
     }
 }

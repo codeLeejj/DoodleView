@@ -2,6 +2,7 @@ package com.lee.boodlelib.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.util.Base64;
 
@@ -23,6 +24,13 @@ import java.io.IOException;
  * @create: 2020-12-21 21:01
  */
 public class BitmapUtil {
+    /**
+     * 将bitmap转义成base64的字符串
+     *
+     * @param bitmap    被转义的bitmap
+     * @param outFormat 输出的格式
+     * @return 转义后的base64
+     */
     public static String bitmap2Base64(Bitmap bitmap, Bitmap.CompressFormat outFormat) {
         String result = null;
         ByteArrayOutputStream baos = null;
@@ -68,7 +76,7 @@ public class BitmapUtil {
      *
      * @param bitmap    要保存的bitmap
      * @param outFormat 输出的图片格式
-     * @param callback  保存完bitmap后回调
+     * @param callback  保存完bitmap后回调(包含文件保存地址)
      */
     public static void save(final Bitmap bitmap, final Bitmap.CompressFormat outFormat, final FileCallback callback) {
         if (callback == null) {
@@ -132,7 +140,28 @@ public class BitmapUtil {
     }
 
     /**
-     * 对Bitmap 质量进行大小压缩
+     * 对Bitmap 大小压缩到指定大小
+     *
+     * @param bitmap
+     * @param height 输出的高度
+     * @param width  输出的宽度
+     * @return 压缩后的bitmap
+     */
+    public static Bitmap compress(Bitmap bitmap, int height, int width) {
+        if (bitmap == null) {
+            return null;
+        }
+
+        float wScale = width * 1.0f / bitmap.getWidth();
+        float hScale = height * 1.0f / bitmap.getHeight();
+
+        Matrix matrix = new Matrix();
+        matrix.setScale(wScale, hScale);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+    /**
+     * 对Bitmap 大小压缩
      *
      * @param bitmap
      * @param outFormat 输出的图片格式
@@ -154,7 +183,7 @@ public class BitmapUtil {
     }
 
     /**
-     * 对Bitmap 质量进行大小压缩
+     * 对Bitmap 大小压缩
      *
      * @param bitmap
      * @param outFormat  输出的图片格式
