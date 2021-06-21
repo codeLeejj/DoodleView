@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Base64;
+import android.util.Log;
 
 import androidx.annotation.IntRange;
 
@@ -16,6 +18,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @program: DoodleView
@@ -24,6 +27,8 @@ import java.io.IOException;
  * @create: 2020-12-21 21:01
  */
 public class BitmapUtil {
+    public static final String TAG = "BitmapUtil";
+
     /**
      * 将bitmap转义成base64的字符串
      *
@@ -161,6 +166,56 @@ public class BitmapUtil {
     }
 
     /**
+     * 对Bitmap 大小压缩到指定文件大小
+     *
+     * @param bitmap
+     * @param kb     输出文件大小
+     * @return 压缩后的bitmap
+     */
+    public static Bitmap compress2FileSize(Bitmap bitmap, Bitmap.CompressFormat format, int kb) {
+        if (bitmap == null) {
+            return null;
+        }
+        float fileSize = getFileSize(bitmap, format) / 1024f;
+        if (fileSize < kb) {
+            return bitmap;
+        }
+        float v = kb / fileSize;
+        double sqrt = Math.sqrt(v);
+        float scale = (float) sqrt;
+        Matrix matrix = new Matrix();
+        matrix.setScale(scale, scale);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    }
+
+    private static int getFileSize(Bitmap bitmap) {
+        return getFileSize(bitmap, Bitmap.CompressFormat.JPEG);
+    }
+
+    /**
+     * 获取bitmap的数据大小
+     *
+     * @param bitmap
+     * @param format
+     * @return 获取到数据大小(单位 bt)
+     */
+    public static int getFileSize(Bitmap bitmap, Bitmap.CompressFormat format) {
+        ByteArrayOutputStream baos = null;
+        try {
+            baos = new ByteArrayOutputStream();
+            //质量压缩方法，这里100表示不压缩，把压缩后的数据存放到
+            bitmap.compress(format, 100, baos);
+            return baos.size();
+        } finally {
+            try {
+                baos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
      * 对Bitmap 大小压缩
      *
      * @param bitmap
@@ -218,4 +273,30 @@ public class BitmapUtil {
             }
         }
     }
+
+    /**
+     * 选择变换
+     *
+     * @param origin 原图
+     * @param alpha  旋转角度，可正可负
+     * @return 旋转后的图片
+     */
+    public static Bitmap rotateBitmap(Bitmap origin, float alpha) {
+        if (origin == null) {
+            return null;
+        }
+        int width = origin.getWidth();
+        int height = origin.getHeight();
+        Matrix matrix = new Matrix();
+        matrix.setRotate(alpha);
+        // 围绕原地进行旋转
+        Bitmap newBM = Bitmap.createBitmap(origin, 0, 0, width, height, matrix, false);
+        if (newBM.equals(origin)) {
+            return newBM;
+        }
+        origin.recycle();
+        return newBM;
+    }
+
+
 }

@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -29,7 +30,7 @@ import java.io.Closeable;
 import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static final String TAG = "MainActivity";
     ComplexDoodleView complexDoodleView;
 
     ImageView iv;
@@ -55,10 +56,47 @@ public class MainActivity extends AppCompatActivity {
         complexDoodleView.getBitmap(R.id.btComplete, new BitmapCallback() {
             @Override
             public void getImage(Bitmap bitmap) {
-                String base64 = BitmapUtil.bitmap2Base64(bitmap, Bitmap.CompressFormat.PNG);
+                Log.w(TAG, "string长度:" + BitmapUtil.bitmap2Base64(bitmap, Bitmap.CompressFormat.JPEG).length());
+                BitmapUtil.save(bitmap, Bitmap.CompressFormat.JPEG, new FileCallback(100, new File(getCacheDir(), "原图.png")) {
+                    @Override
+                    public void getImage(File bitmap) {
+                        long length = bitmap.length() / 1024;
+                        Log.w(TAG, "文件长度:" + length);
+                    }
+                });
+
+                bitmap = compress(bitmap, 30);
+
+                Log.w(TAG, "string长度:" + BitmapUtil.bitmap2Base64(bitmap, Bitmap.CompressFormat.JPEG).length());
+                BitmapUtil.save(bitmap, Bitmap.CompressFormat.JPEG, new FileCallback(100, new File(getCacheDir(), "30kb.png")) {
+                    @Override
+                    public void getImage(File bitmap) {
+                        long length = bitmap.length() / 1024;
+                        Log.w(TAG, "文件长度:" + length);
+                    }
+                });
+                bitmap =  BitmapUtil.rotateBitmap(bitmap,-90);
                 iv.setImageBitmap(bitmap);
             }
         });
+    }
+
+    private Bitmap compress(Bitmap bitmap, int kb) {
+        float fileSize = BitmapUtil.getFileSize(bitmap, Bitmap.CompressFormat.JPEG) / 1024f;
+        if (fileSize < kb) {
+            return bitmap;
+        }
+        int quality = 90;
+        Bitmap result = null;
+        while (quality >= 50 && fileSize > kb) {
+            result = BitmapUtil.compress(bitmap, Bitmap.CompressFormat.JPEG, quality);
+            quality -= 5;
+            fileSize = BitmapUtil.getFileSize(result, Bitmap.CompressFormat.JPEG) / 1024f;
+        }
+        if (fileSize < kb) {
+            return result;
+        }
+        return BitmapUtil.compress2FileSize(result, Bitmap.CompressFormat.JPEG, kb);
     }
 
     public static final int REQUEST_CODE = 500;
@@ -150,14 +188,16 @@ public class MainActivity extends AppCompatActivity {
                     complexDoodleView.getBitmap(R.id.btComplete, new BitmapCallback() {
                         @Override
                         public void getImage(Bitmap bitmap) {
-                            Bitmap compress = BitmapUtil.compress(bitmap, Bitmap.CompressFormat.PNG, 500, 500);
+                            Bitmap compress = BitmapUtil.compress2FileSize(bitmap, Bitmap.CompressFormat.PNG, 30);
+//                            Bitmap compress = BitmapUtil.compress(bitmap, Bitmap.CompressFormat.PNG, 500, 500);
                             iv.setImageBitmap(compress);
                         }
                     });
                     return complexDoodleView;
                 }
             };
-        }else{
+        } else {
+            //{"MSG":"","STATUS":"1","PORTAL_DATA":{"IS_ZSY":"0","IS_TC":"0"}}
 
         }
         helper.show(suspension);

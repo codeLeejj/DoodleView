@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/iv"
-            android:layout_width="24dp"
-            android:layout_height="60dp"
+            android:layout_width="120dp"
+            android:layout_height="48dp"
             android:background="@drawable/sp_border_line" />
 
         <LinearLayout

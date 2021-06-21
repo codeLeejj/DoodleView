@@ -23,7 +23,7 @@ public class SuspensionHelper {
     ISuspension suspension;
 
     private SuspensionHelper(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         if (windowManager == null)
             // 获取WindowManager服务
             windowManager = (WindowManager) mContext.getSystemService(WINDOW_SERVICE);
@@ -33,7 +33,7 @@ public class SuspensionHelper {
         if (helper == null) {
             helper = new SuspensionHelper(context);
         } else {
-            helper.mContext = context;
+            helper.mContext = context.getApplicationContext();
         }
         return helper;
     }
